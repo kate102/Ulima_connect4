@@ -33,9 +33,9 @@ class Connect4():
         for i in range(self.NUM_ROWS-self.NUM2WIN+1): #(6-4) + 1) suboard of 4 upto where start point is num2win away from end of board
             for j in range(self.NUM_COLS-self.NUM2WIN+1): #(7-4) + 1
                 subboard = self.board[i:i+self.NUM2WIN, j:j+self.NUM2WIN]
-                if np.max(np.abs(np.sum(subboard, 0))) == self.NUM2WIN: # check the vertical
-                    return True
-                if np.max(np.abs(np.sum(subboard, 1))) == self.NUM2WIN: # check the horizontal
+                if np.max(np.abs(np.sum(subboard, 0))) == self.NUM2WIN: # check the vertical; if the sum of the values in column is abs(4) then win (the sum will never be more
+                    return True                                            # than 4, and if it's less then 4 then it's obviously not a win)
+                if np.max(np.abs(np.sum(subboard, 1))) == self.NUM2WIN: # check the horizontal (same for vertical)
                     return True
                 elif np.abs(sum([subboard[k, k] for k in range(self.NUM2WIN)])) == self.NUM2WIN: # diaganol
                     return True
@@ -49,9 +49,9 @@ def main():
     my_game = Connect4()
     moves = my_game.get_avail_moves()
     print(my_game)
-    player = 1 # first player is alway 1
-    human_player = rand.choice([1, -1])
-    while moves != []:
+    player = 1 # first player is alway 1, but 1 is randomly assign to human or computer
+    human_player = rand.choice([1, -1]) #randomise if the human player is O or X
+    while moves != []: #loop until the board is full (so as long as we can make a move)
 
         if player == human_player:
             print(f"Available moves are: {moves}")
@@ -65,7 +65,7 @@ def main():
             print(f"{XO[player]} Wins!")
             break
         moves = my_game.get_avail_moves()
-        player = -player
+        player = -player #switches between human and computer
 
 
 if __name__ == "__main__":
