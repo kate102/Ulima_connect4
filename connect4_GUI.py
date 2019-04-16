@@ -4,7 +4,7 @@
 
 from connect4 import Connect4
 import pygame
-import sys
+import sys # allows us to use standard input and standard output and standard error
 import random
 import math
 
@@ -19,33 +19,33 @@ class Connect4_GUI(Connect4):
     YELLOW = (255, 255, 0)
 
     SQUARESIZE = 100
-    WIDTH = Connect4.NUM_COLS*SQUARESIZE
-    HEIGHT = (1+Connect4.NUM_ROWS)*SQUARESIZE
+    WIDTH = Connect4.NUM_COLS * SQUARESIZE
+    HEIGHT = (1 + Connect4.NUM_ROWS) * SQUARESIZE # plus 1 so there is height to put a token in
     SIZE = (WIDTH, HEIGHT)
-    RADIUS = int(SQUARESIZE/2 - 5)
-    SCREEN = pygame.display.set_mode(SIZE)
+    RADIUS = int(SQUARESIZE / 2 - 5)
+    SCREEN = pygame.display.set_mode(SIZE) # set the screen size
 
     def draw_board(self):
         for c in range(self.NUM_COLS):
             for r in range(self.NUM_ROWS):
-                loc_size = (c*self.SQUARESIZE, (r+1)*self.SQUARESIZE, self.SQUARESIZE, self.SQUARESIZE)
-                pygame.draw.rect(self.SCREEN, self.BLUE, loc_size)
-                loc = (int((c+0.5)*self.SQUARESIZE), int((r+1.5)*self.SQUARESIZE))
-                pygame.draw.circle(self.SCREEN, self.BLACK, loc, self.RADIUS)
+                loc_size = (c * self.SQUARESIZE, (r + 1) * self.SQUARESIZE, self.SQUARESIZE, self.SQUARESIZE) # size of blue rect
+                pygame.draw.rect(self.SCREEN, self.BLUE, loc_size) # draws blue rectangle (squares) around black holes
+                loc = (int((c + 0.5) * self.SQUARESIZE), int((r + 1.5) * self.SQUARESIZE)) # location
+                pygame.draw.circle(self.SCREEN, self.BLACK, loc, self.RADIUS) # draws black holes on the blue rectangles
 
         for c in range(self.NUM_COLS):
             for r in range(self.NUM_ROWS):
                 if self.board[r][c] == 1:
-                    loc = (int((c+0.5)*self.SQUARESIZE), int((r+1.5)*self.SQUARESIZE))
+                    loc = (int((c + 0.5) * self.SQUARESIZE), int((r + 1.5) * self.SQUARESIZE)) # location: dopping the red discs and staying in place
                     pygame.draw.circle(self.SCREEN, self.RED, loc, self.RADIUS)
                 elif self.board[r][c] == -1:
-                    loc = (int((c+0.5)*self.SQUARESIZE), int((r+1.5)*self.SQUARESIZE))
+                    loc = (int((c + 0.5) * self.SQUARESIZE), int((r + 1.5) * self.SQUARESIZE)) # location: dopping the yellow discs and staying in place
                     pygame.draw.circle(self.SCREEN, self.YELLOW, loc, self.RADIUS)
-        pygame.display.update()
+        pygame.display.update() # update display
 
     def run_game(self):
         pygame.init()
-        myfont = pygame.font.SysFont("monospace", 75)
+        myfont = pygame.font.SysFont("monospace", 75) # winner text font
         self.draw_board()
         pygame.display.update()
 
@@ -55,9 +55,9 @@ class Connect4_GUI(Connect4):
         human_player = rand.choice([1, -1])
         winner = False
         exit_flag = False
-        while moves != [] and winner == False and exit_flag == False:
+        while moves != [] and winner == False and exit_flag == False: # while game is running
             for event in pygame.event.get():
-                if event.type == pygame.QUIT:
+                if event.type == pygame.QUIT: # you can quit
                     exit_flag = True
 
                 if event.type == pygame.MOUSEMOTION:

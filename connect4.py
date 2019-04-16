@@ -49,7 +49,7 @@ def main():
     my_game = Connect4()
     moves = my_game.get_avail_moves()
     print(my_game)
-    player = 1 # first player is alway 1, but 1 is randomly assign to human or computer
+    player = 1 # first player is always 1, but 1 is randomly assign to human or computer
     human_player = rand.choice([1, -1]) #randomise if the human player is O or X
     while moves != []: #loop until the board is full (so as long as we can make a move)
 
