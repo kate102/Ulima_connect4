@@ -18,20 +18,20 @@ class Connect4():
     def get_avail_moves(self): # returns columns that are available
         return [m for m in range(self.NUM_COLS) if self.board[0][m] == 0] # check top row for empty
 
-    def make_move(self, move):
-        if np.sum(self.board) == 0:
-            player = 1
+    def make_move(self, move): # sum of the rows and columns
+        if np.sum(self.board) == 0: #if the sum is 0 it's player1
+            player = 1 # if sum is 1 it's player 2 turn
         else:
             player = -1
 
         j = 0
-        while j+1 < self.NUM_ROWS and self.board[j+1][move] == 0: j+=1
+        while j+1 < self.NUM_ROWS and self.board[j+1][move] == 0: j+=1 # if it's available
 
-        self.board[j][move] = player
+        self.board[j][move] = player # puts -1 or 1 in the empty cell
 
     def get_winner(self): # check every 4x4 subboard
-        for i in range(self.NUM_ROWS-self.NUM2WIN+1):
-            for j in range(self.NUM_COLS-self.NUM2WIN+1):
+        for i in range(self.NUM_ROWS-self.NUM2WIN+1): #(6-4) + 1) suboard of 4 upto where start point is num2win away from end of board
+            for j in range(self.NUM_COLS-self.NUM2WIN+1): #(7-4) + 1
                 subboard = self.board[i:i+self.NUM2WIN, j:j+self.NUM2WIN]
                 if np.max(np.abs(np.sum(subboard, 0))) == self.NUM2WIN: # check the vertical
                     return True
