@@ -1,5 +1,6 @@
 import numpy as np  # For 2D array
 import random # import random class
+import time
 
 rand = random.Random()
 
@@ -9,6 +10,9 @@ class Connect4():
     NUM2WIN = 4
     def __init__(self): # initialize
         self.board = np.zeros((self.NUM_ROWS, self.NUM_COLS)) # define board with number of rows and columns
+        data_set_file_name = "data_set_" + str(int(time.time())) + ".npy"
+        self.data_set_file = open(data_set_file_name,"w+")
+
 
     def __str__(self): # dunder string method to display the board for use with ASCII. Called automatically.
         str_board = "\n\n" + str(self.board).replace("0.", "_").replace("-1.", " O").replace("1.", "X")
@@ -19,6 +23,8 @@ class Connect4():
         return [m for m in range(self.NUM_COLS) if self.board[0][m] == 0] # check top row for empty
 
     def make_move(self, move): # sum of the rows and columns
+        #  Write to file
+        np.savetxt(self.data_set_file, self.board, delimiter="," )
         if np.sum(self.board) == 0: #if the sum is 0 it's player1
             player = 1 # if sum is 1 it's player 2 turn
         else:
@@ -66,7 +72,7 @@ def main():
             break
         moves = my_game.get_avail_moves()
         player = -player #switches between human and computer
-
+    self.data_set_file.close()
 
 if __name__ == "__main__":
     main()
