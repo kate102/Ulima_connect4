@@ -10,7 +10,7 @@ class Connect4():
     NUM2WIN = 4
     def __init__(self): # initialize
         self.board = np.zeros((self.NUM_ROWS, self.NUM_COLS)) # define board with number of rows and columns
-        data_set_file_name = "data_set_" + str(int(time.time())) + ".npy"
+        data_set_file_name = "./Saved_games/data_set_" + str(int(time.time())) + ".npy"
         self.data_set_file = open(data_set_file_name,"w+")
 
 
