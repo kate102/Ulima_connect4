@@ -1,7 +1,7 @@
 import numpy as np  # For 2D array
 import random # import random class
+from datetime import datetime
 import time
-
 rand = random.Random()
 
 class Connect4():
@@ -10,7 +10,8 @@ class Connect4():
     NUM2WIN = 4
     def __init__(self): # initialize
         self.board = np.zeros((self.NUM_ROWS, self.NUM_COLS)) # define board with number of rows and columns
-        data_set_file_name = "./Saved_games/data_set_" + str(int(time.time())) + ".npy"
+        now = datetime.now()
+        data_set_file_name = "./Saved_games/data_set_" + str(now.strftime("%Y-%m-%d_%H:%M:%S")) + ".npy"
         self.data_set_file = open(data_set_file_name,"w+")
 
 
