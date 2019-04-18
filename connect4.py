@@ -23,8 +23,7 @@ class Connect4():
         return [m for m in range(self.NUM_COLS) if self.board[0][m] == 0] # check top row for empty
 
     def make_move(self, move): # sum of the rows and columns
-        #  Write to file
-        np.savetxt(self.data_set_file, self.board, delimiter="," )
+
         if np.sum(self.board) == 0: #if the sum is 0 it's player1
             player = 1 # if sum is 1 it's player 2 turn
         else:
@@ -49,6 +48,10 @@ class Connect4():
                     return True
         return False
 
+    def save_move(self):
+        print(self.board)
+        np.savetxt(self.data_set_file, self.board, delimiter="," )
+
 
 def main():
     XO = {-1: "O", 0: "Nobody", 1: "X"}
@@ -65,6 +68,7 @@ def main():
         else:
             move = rand.choice(moves)
         my_game.make_move(move)
+        my_game.save_move()
         print(my_game)
         winner =  my_game.get_winner()
         if winner:
