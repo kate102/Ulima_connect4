@@ -9,13 +9,13 @@ class Connect4():
     NUM_COLS = 7
     NUM2WIN = 4
     def __init__(self): # initialize
-        self.board = np.zeros((self.NUM_ROWS, self.NUM_COLS)) # define board with number of rows and columns
+        self.board = np.zeros((self.NUM_ROWS, self.NUM_COLS), int) # define board with number of rows and columns
         data_set_file_name = "./Saved_games/data_set_" + str(int(time.time())) + ".npy"
         self.data_set_file = open(data_set_file_name,"w+")
 
 
     def __str__(self): # dunder string method to display the board for use with ASCII. Called automatically.
-        str_board = "\n\n" + str(self.board).replace("0.", "_").replace("-1.", " O").replace("1.", "X")
+        str_board = "\n\n" + str(self.board).replace("0", "_").replace("-1", " O").replace("1", "X")
         str_board = str_board.replace("[", " ").replace("]", " ")
         return str_board
 
@@ -28,7 +28,8 @@ class Connect4():
             player = 1 # if sum is 1 it's player 2 turn
         else:
             player = -1
-
+            print(self.board)
+        np.savetxt(self.data_set_file, self.board, fmt='%1.1i',delimiter="," )
         j = 0
         while j+1 < self.NUM_ROWS and self.board[j+1][move] == 0: j+=1 # if it's available
 
