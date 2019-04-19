@@ -29,7 +29,7 @@ class Connect4Env(gym.Env):
     def reset(self):
         self.__init__()
 
-    def render(self):
+    def render(self, arg):
         True
 
     def player_make_move(self, player, move):
