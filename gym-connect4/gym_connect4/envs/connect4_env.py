@@ -1,10 +1,13 @@
 import numpy as np  # For 2D array
 import random # import random class
 import copy
+import gym
+import math
+from gym import spaces, error
 
 rand = random.Random()
 
-class Connect4():
+class Connect4Env(gym.Env):
     NUM_ROWS = 6
     NUM_COLS = 7
     NUM2WIN = 4
@@ -22,6 +25,12 @@ class Connect4():
         if self.done == False:
             self.player_make_move(-1, move)
         return self.state, self.reward, self.done, {}
+
+    def reset(self):
+        self.__init__()
+
+    def render(self):
+        True
 
     def player_make_move(self, player, move):
         moves = self.get_avail_moves()
