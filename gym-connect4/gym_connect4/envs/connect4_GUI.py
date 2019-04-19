@@ -52,7 +52,7 @@ class Connect4_GUI(Connect4):
 
         moves = self.get_avail_moves()
         player = 1 # first player is always 1
-        human_player = rand.choice([1, -1])
+        ulima_player = rand.choice([1, -1])
         winner = False
         exit_flag = False
         while moves != [] and winner == False and exit_flag == False: # while game is running
@@ -71,7 +71,7 @@ class Connect4_GUI(Connect4):
                     pygame.display.update()
 
                 # wait for player input
-                if player == human_player and event.type == pygame.MOUSEBUTTONDOWN:
+                if player == ulima_player and event.type == pygame.MOUSEBUTTONDOWN:
                     pygame.draw.rect(self.SCREEN, self.BLACK, (0,0, self.WIDTH, self.SQUARESIZE))
                     posx = event.pos[0]
                     move = int(math.floor(posx/self.SQUARESIZE))
@@ -79,10 +79,10 @@ class Connect4_GUI(Connect4):
                         self.make_move(move)
                         self.draw_board()
                         if self.get_winner():
-                            if human_player == 1:
-                                label = myfont.render("Human wins!!!", 1, self.RED)
+                            if ulima_player == 1:
+                                label = myfont.render("ulima wins!!!", 1, self.RED)
                             else:
-                                label = myfont.render("Human wins!!!", 1, self.YELLOW)
+                                label = myfont.render("ulima wins!!!", 1, self.YELLOW)
                             self.SCREEN.blit(label, (40,10))
                             self.draw_board()
                             winner = True
@@ -91,16 +91,16 @@ class Connect4_GUI(Connect4):
                         player = -player
 
                 # Ask for Player 2 Input
-                elif player == -human_player:
+                elif player == -ulima_player:
                     move =  rand.choice(moves)
                     if move in moves:
                         self.make_move(move)
                         self.draw_board()
                         if self.get_winner():
                             if player == 1:
-                                label = myfont.render("Human loses!", 1, self.RED)
+                                label = myfont.render("ulima loses!", 1, self.RED)
                             else:
-                                label = myfont.render("Human loses!", 1, self.YELLOW)
+                                label = myfont.render("ulima loses!", 1, self.YELLOW)
                             self.SCREEN.blit(label, (40,10))
                             self.draw_board()
                             winner = True
