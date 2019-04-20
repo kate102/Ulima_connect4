@@ -20,7 +20,8 @@ class Connect4Env(gym.Env):
 
     def step(self, move):
         if move not in self.get_avail_moves():
-            raise Exception("Invalid move: {}".format(move))
+            self.done = True
+            # raise Exception("Invalid move: {}".format(move))
 
         self.last_board = copy.deepcopy(self.board)
 
