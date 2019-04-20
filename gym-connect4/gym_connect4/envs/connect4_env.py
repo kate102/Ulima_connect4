@@ -3,17 +3,20 @@ import random # import random class
 import copy
 import gym
 import math
-from gym import spaces, error
+from gym import spaces, error, utils
+from gym.utils import seeding
 
 rand = random.Random()
 
 class Connect4Env(gym.Env):
+    metadata = {'render.modes': ['ulima']}
     NUM_ROWS = 6
     NUM_COLS = 7
     NUM2WIN = 4
     def __init__(self): # initialize
         self.board = np.zeros((self.NUM_ROWS, self.NUM_COLS)) # define board with number of rows and columns
-        self.ulima_player = rand.choice([1, -1]) #randomise if the ulima player is O or X
+        self.ulima = rand.choice([1, -1]) #randomise if ulima is 1 or -1
+        self.action_space = spaces.Discrete(7) # This is OpenAI syntax for legal moves.
 
     def step(self, move):
         if move not in self.get_avail_moves():
@@ -29,12 +32,12 @@ class Connect4Env(gym.Env):
     def reset(self):
         self.__init__()
 
-    def render(self, arg):
+    def render(self, mode='ulima'):
         True
 
     def player_make_move(self, player, move):
         moves = self.get_avail_moves()
-        if player == self.ulima_player:
+        if player == self.ulima:
             move_choice = move
         else:
             move_choice = rand.choice(moves)
@@ -46,7 +49,7 @@ class Connect4Env(gym.Env):
         if winner:
             self.done = True
             print('GAME ENDS')
-            if player == self.ulima_player:
+            if player == self.ulima:
                 self.reward = 1
                 print('ULIMA WON')
 

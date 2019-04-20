@@ -2,6 +2,8 @@ import numpy as np  # For 2D array
 import random # import random class
 import copy
 import gym
+from gym import spaces, error, utils
+from gym.utils import seeding
 import math
 import gym_connect4
 
