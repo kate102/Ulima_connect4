@@ -15,6 +15,7 @@ env.reset()
 MAX_STEPS = 21 # half of 7 x 6 board
 SCORE_REQUIREMENT = 1 # This is the score that means Ulima has done well. Could do it as a proportion of wins..?
 INITIAL_GAMES = 1
+rand = random.Random()
 
 class Ulima():
 
@@ -27,7 +28,8 @@ class Ulima():
             self.previous_observation = []
 
             for step_index in range(MAX_STEPS):
-                action = env.action_space.sample() # can we change this to .get_avail_moves
+                # action = env.action_space.sample() # can we change this to .get_avail_moves
+                action = rand.choice(env.get_avail_moves())
                 observation, reward, done, info = env.step(action)
 
                 # hot_action is the current Ulima move
@@ -37,8 +39,6 @@ class Ulima():
                 copy_observation = copy.deepcopy(observation)
                 self.training_data += [copy_observation, hot_action]
 
-                print(self.training_data)
-
                 self.previous_observation = observation
                 score += reward
                 if done:
@@ -46,8 +46,7 @@ class Ulima():
 
             env.reset()
 
-        # print(self.accepted_scores)
-
+        print(self.accepted_scores)
         return self.training_data
 
 
