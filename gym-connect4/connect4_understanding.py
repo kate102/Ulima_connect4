@@ -38,13 +38,13 @@ class Ulima():
                 if done:
                     break
 
-            if score >= SCORE_REQUIREMENT: # only saves won games but should probs also save lost games
-                self.accepted_scores.append(score) # if Ulima won the game then one hot encode the last action
-                for data in self.game_memory:
-                    action = data[1]
-                    hot_move = [0, 0, 0, 0, 0, 0]
-                    hot_move.insert(action, 1)
-                    self.training_data.append([data[0], hot_move]) # should this be self.previous_observation in stead of data[0]
+            # if score >= SCORE_REQUIREMENT: # only saves won games but should probs also save lost games
+            self.accepted_scores.append(score) # if Ulima won the game then one hot encode the last action
+            for data in self.game_memory:
+                action = data[1]
+                hot_move = [0, 0, 0, 0, 0, 0]
+                hot_move.insert(action, 1)
+                self.training_data.append([data[0], hot_move]) # should this be self.previous_observation in stead of data[0]
 
             env.reset()
 
