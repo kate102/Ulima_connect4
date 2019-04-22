@@ -14,7 +14,7 @@ env = gym.make('Connect4-v0')
 env.reset()
 MAX_STEPS = 21 # half of 7 x 6 board
 SCORE_REQUIREMENT = 1 # This is the score that means Ulima has done well. Could do it as a proportion of wins..?
-INITIAL_GAMES = 1
+INITIAL_GAMES = 100
 rand = random.Random()
 
 class Ulima():
@@ -47,7 +47,7 @@ class Ulima():
             env.reset()
 
         print(self.accepted_scores)
-        return self.training_data
+        # return self.training_data
 
 
     # def build_model(input_size, output_size):

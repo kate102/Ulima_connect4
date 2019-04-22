@@ -44,6 +44,9 @@ class Connect4Env(gym.Env):
         winner = self.get_winner()
         self.reward = 0
         self.done = False
+        if moves == 0:
+            print('DRAW')
+            self.done = True
         if winner:
             self.done = True
             if player == self.ulima:
