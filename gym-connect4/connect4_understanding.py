@@ -39,8 +39,8 @@ class Ulima():
                 copy_observation = copy.deepcopy(observation)
                 self.training_data += [copy_observation, hot_action]
 
-                self.previous_observation = observation
                 score += reward
+                self.accepted_scores.append(score) # maybe can get rid of score and just add reward.
                 if done:
                     break
 

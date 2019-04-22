@@ -16,19 +16,17 @@ class Connect4Env(gym.Env):
     def __init__(self): # initialize
         self.board = np.zeros((self.NUM_ROWS, self.NUM_COLS)) # define board with number of rows and columns
         self.ulima = rand.choice([1, -1]) #randomise if ulima is 1 or -1
-        self.action_space = spaces.Discrete(7) # This is OpenAI syntax for legal moves.
 
     def step(self, move):
-        if move not in self.get_avail_moves():
-            self.done = True
-            # raise Exception("Invalid move: {}".format(move))
+        # if move not in self.get_avail_moves():
+        #     self.done = True
 
         self.last_board = copy.deepcopy(self.board)
 
         self.player_make_move(1, move) # player 1 always goes first. Player 1 is randomised between ulima and computer.
         if self.done == False:
             self.player_make_move(-1, move)
-        return self.state, self.reward, self.done, {}
+        return self.board, self.reward, self.done, {}
 
     def reset(self):
         self.__init__()
@@ -46,13 +44,13 @@ class Connect4Env(gym.Env):
         winner = self.get_winner()
         self.reward = 0
         self.done = False
-        self.state = self.board
         if winner:
             self.done = True
-            print('GAME ENDS')
             if player == self.ulima:
                 self.reward = 1
                 print('ULIMA WON')
+            else:
+                print('DUMMY WON')
 
     def __str__(self): # dunder string method to display the board for use with ASCII. Called automatically.
         str_board = "\n\n" + str(self.board).replace("0.", "_").replace("-1.", " O").replace("1.", "X")
