@@ -14,41 +14,39 @@ env = gym.make('Connect4-v0')
 env.reset()
 MAX_STEPS = 21 # half of 7 x 6 board
 SCORE_REQUIREMENT = 1 # This is the score that means Ulima has done well. Could do it as a proportion of wins..?
-INITIAL_GAMES = 5
+INITIAL_GAMES = 1
 
 class Ulima():
 
     def model_data_preparation(self):
+        # for each play we want to store the state of the board and the move
         self.training_data = []
         self.accepted_scores = []
         for game_index in range(INITIAL_GAMES): # start by playing 10,000 games
             score = 0
-            self.game_memory = []
             self.previous_observation = []
 
             for step_index in range(MAX_STEPS):
                 action = env.action_space.sample() # can we change this to .get_avail_moves
                 observation, reward, done, info = env.step(action)
 
-                if len(self.previous_observation) > 0: # store the prev observation if there is one
-                    self.game_memory.append([self.previous_observation, action])
+                # hot_action is the current Ulima move
+                hot_action = [0, 0, 0, 0, 0, 0]
+                hot_action.insert(action, 1)
+
+                copy_observation = copy.deepcopy(observation)
+                self.training_data += [copy_observation, hot_action]
+
+                print(self.training_data)
 
                 self.previous_observation = observation
                 score += reward
                 if done:
                     break
 
-            # if score >= SCORE_REQUIREMENT: # only saves won games but should probs also save lost games
-            self.accepted_scores.append(score) # if Ulima won the game then one hot encode the last action
-            for data in self.game_memory:
-                action = data[1]
-                hot_move = [0, 0, 0, 0, 0, 0]
-                hot_move.insert(action, 1)
-                self.training_data.append([data[0], hot_move]) # should this be self.previous_observation in stead of data[0]
-
             env.reset()
 
-        print(self.accepted_scores)
+        # print(self.accepted_scores)
 
         return self.training_data
 
