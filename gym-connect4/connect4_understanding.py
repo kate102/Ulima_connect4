@@ -21,14 +21,16 @@ class TrainUlima():
 
     def model_data_preparation(self):
         # for each play we want to store the state of the board and the move
-        self.training_data = []
+        self.board_data = []
+        self.action_data =[]
         self.accepted_scores = []
         self.scores = []
 
         for _ in range(INITIAL_GAMES): # start by playing 10,000 games
             # score = 0
             self.previous_observation = []
-            self.current_game = []
+            self.current_game_boards = []
+            self.current_game_actions = []
 
             for _ in range(MAX_STEPS):
                 # action = env.action_space.sample() # can we change this to .get_avail_moves
@@ -40,44 +42,45 @@ class TrainUlima():
                 hot_action.insert(action, 1)
 
                 copy_observation = copy.deepcopy(observation)
-                game_snapshot = []
-                game_snapshot.append([copy_observation, hot_action])
-                self.current_game  += game_snapshot
-                if reward == 1:
-                    self.training_data += self.current_game
 
-                # score += reward
-                # self.accepted_scores.append(score) # maybe can get rid of score and just add reward.
+                self.current_game_boards.append(copy_observation)
+                self.current_game_actions.append(hot_action)
+                if reward == 1:
+                    self.board_data += self.current_game_boards
+                    self.action_data += self.current_game_actions
+
                 if done:
                     break
 
             env.reset()
 
-        # for _ in range(len(self.accepted_scores)):
-        #     self.scores.append(reward)
-        # self.accepted_scores = self.scores
-        # print(self.accepted_scores)
-        return self.training_data
+        return self.board_data, self.action_data
 
 
-    def train_model(self, training_data):
-        for i in training_data:
-            # print("This is training data ...")
-            # print(i)
-            X = i[0].reshape(-1, 42)[0]
-            y = i[1]
+    def train_model(self):
+        X_data, y = self.model_data_preparation()
+        for i in X_data:
+            X = i.reshape(-1, 42)[0]
+
         model = self.build_model(input_size=len(X), output_size=len(y))
-
         model.fit(X, y, epochs=10)
         return model
 
     def build_model(self, input_size, output_size):
         model = Sequential()
-        model.add(Dense(128, input_dim=input_size, activation='relu'))
-        model.add(Dense(52, activation='relu'))
-        model.add(Dense(output_size, activation='linear'))
-        model.compile(loss='mse', optimizer=Adam())
+        model.add(Dense(128, input_shape=input_size, activation='relu'))
+        model.add(Dropout(0.6))
+        model.add(Dense(256, input_shape=input_size, activation='relu'))
+        model.add(Dropout(0.6))
+        model.add(Dense(512, input_shape=input_size, activation='relu'))
+        model.add(Dropout(0.6))
+        model.add(Dense(256, input_shape=input_size, activation='relu'))
+        model.add(Dropout(0.6))
+        model.add(Dense(128, input_shape=input_size, activation='relu'))
+        model.add(Dropout(0.6))
+        model.add(Dense(2, input_shape=input_size, activation='softmax'))
+        model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
         return model
 
 u = TrainUlima()
-trained_model = u.train_model(u.model_data_preparation())
+trained_model = u.train_model()
