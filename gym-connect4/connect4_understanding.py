@@ -26,14 +26,14 @@ class TrainUlima():
         self.scores = []
         
         for _ in range(INITIAL_GAMES): # start by playing 10,000 games
-            score = 0
+            # score = 0
             self.previous_observation = []
             self.current_game = []
 
             for _ in range(MAX_STEPS):
                 # action = env.action_space.sample() # can we change this to .get_avail_moves
                 action = rand.choice(env.get_avail_moves())
-                observation, reward, done, info = env.step(action)
+                observation, reward, done, _ = env.step(action)
 
                 # hot_action is the current Ulima move
                 hot_action = [0, 0, 0, 0, 0, 0]
@@ -60,22 +60,27 @@ class TrainUlima():
         return self.training_data
 
 
-#     def build_model(self, input_size, output_size):
-#         model = Sequential()
-#         model.add(Dense(128, input_dim=input_size, activation='relu'))
-#         model.add(Dense(52, activation='relu'))
-#         model.add(Dense(output_size, activation='linear'))
-#         model.compile(loss='mse', optimizer=Adam())
-#         return model
+    def build_model(self, input_size, output_size):
+        model = Sequential()
+        model.add(Dense(128, input_dim=input_size, activation='relu'))
+        model.add(Dense(52, activation='relu'))
+        model.add(Dense(output_size, activation='linear'))
+        model.compile(loss='mse', optimizer=Adam())
+        return model
 
 
-#     def train_model(self, training_data):
-#         X = np.array([i[0] for i in training_data]).reshape(training_data[i][0], [-1])
-#         y = np.array([i[1] for i in training_data]).reshape(training_data[i][1], [-1])
-#         model = build_model(input_size=len(X[0]), output_size=len(y[0]))
+    def train_model(self, training_data):
+        # X = np.array([i[0] for i in training_data]).reshape(training_data[0][0], [-1])
+        # y = np.array([i[1] for i in training_data]).reshape(training_data[0][1], [-1])
+        for i in training_data:
+            print("This is training data ...")
+            print(training_data[i])
+            X = training_data[i][0].reshape(-1, 42)
+            y = training_data[i][1]
+        model = self.build_model(input_size=len(X[0]), output_size=len(y[0]))
 
-#         model.fit(X, y, epochs=10)
-#         return model
+        model.fit(X, y, epochs=10)
+        return model
 
-# u = TrainUlima()
-# trained_model = u.train_model(u.model_data_preparation())
+u = TrainUlima()
+trained_model = u.train_model(u.model_data_preparation())
