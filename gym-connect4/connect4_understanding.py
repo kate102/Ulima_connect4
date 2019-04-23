@@ -14,7 +14,7 @@ env = gym.make('Connect4-v0')
 env.reset()
 MAX_STEPS = 21 # half of 7 x 6 board
 SCORE_REQUIREMENT = 1 # This is the score that means Ulima has done well. Could do it as a proportion of wins..?
-INITIAL_GAMES = 2
+INITIAL_GAMES = 4
 rand = random.Random()
 
 class TrainUlima():
@@ -24,7 +24,7 @@ class TrainUlima():
         self.training_data = []
         self.accepted_scores = []
         self.scores = []
-        
+
         for _ in range(INITIAL_GAMES): # start by playing 10,000 games
             # score = 0
             self.previous_observation = []
@@ -60,26 +60,23 @@ class TrainUlima():
         return self.training_data
 
 
+    def train_model(self, training_data):
+        for i in training_data:
+            # print("This is training data ...")
+            # print(i)
+            X = i[0].reshape(-1, 42)[0]
+            y = i[1]
+        model = self.build_model(input_size=len(X), output_size=len(y))
+
+        model.fit(X, y, epochs=10)
+        return model
+
     def build_model(self, input_size, output_size):
         model = Sequential()
         model.add(Dense(128, input_dim=input_size, activation='relu'))
         model.add(Dense(52, activation='relu'))
         model.add(Dense(output_size, activation='linear'))
         model.compile(loss='mse', optimizer=Adam())
-        return model
-
-
-    def train_model(self, training_data):
-        # X = np.array([i[0] for i in training_data]).reshape(training_data[0][0], [-1])
-        # y = np.array([i[1] for i in training_data]).reshape(training_data[0][1], [-1])
-        for i in training_data:
-            print("This is training data ...")
-            print(training_data[i])
-            X = training_data[i][0].reshape(-1, 42)
-            y = training_data[i][1]
-        model = self.build_model(input_size=len(X[0]), output_size=len(y[0]))
-
-        model.fit(X, y, epochs=10)
         return model
 
 u = TrainUlima()
