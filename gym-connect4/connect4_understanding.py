@@ -38,7 +38,9 @@ class TrainUlima():
                 hot_action.insert(action, 1)
 
                 copy_observation = copy.deepcopy(observation)
-                self.training_data += [copy_observation, hot_action]
+                game_snapshot = []
+                game_snapshot.append([copy_observation, hot_action])
+                self.training_data += game_snapshot
 
                 score += reward
                 self.accepted_scores.append(score) # maybe can get rid of score and just add reward.
@@ -47,7 +49,7 @@ class TrainUlima():
 
             env.reset()
 
-        for i in range(len(self.accepted_scores)):
+        for _ in range(len(self.accepted_scores)):
             self.scores.append(reward)
         self.accepted_scores = self.scores
         print(self.accepted_scores)
