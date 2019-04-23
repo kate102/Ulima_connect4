@@ -14,7 +14,7 @@ env = gym.make('Connect4-v0')
 env.reset()
 MAX_STEPS = 21 # half of 7 x 6 board
 SCORE_REQUIREMENT = 1 # This is the score that means Ulima has done well. Could do it as a proportion of wins..?
-INITIAL_GAMES = 1
+INITIAL_GAMES = 2
 rand = random.Random()
 
 class TrainUlima():
@@ -24,9 +24,11 @@ class TrainUlima():
         self.training_data = []
         self.accepted_scores = []
         self.scores = []
+        
         for _ in range(INITIAL_GAMES): # start by playing 10,000 games
             score = 0
             self.previous_observation = []
+            self.current_game = []
 
             for _ in range(MAX_STEPS):
                 # action = env.action_space.sample() # can we change this to .get_avail_moves
@@ -40,19 +42,21 @@ class TrainUlima():
                 copy_observation = copy.deepcopy(observation)
                 game_snapshot = []
                 game_snapshot.append([copy_observation, hot_action])
-                self.training_data += game_snapshot
+                self.current_game  += game_snapshot
+                if reward == 1:
+                    self.training_data += self.current_game
 
-                score += reward
-                self.accepted_scores.append(score) # maybe can get rid of score and just add reward.
+                # score += reward
+                # self.accepted_scores.append(score) # maybe can get rid of score and just add reward.
                 if done:
                     break
 
             env.reset()
 
-        for _ in range(len(self.accepted_scores)):
-            self.scores.append(reward)
-        self.accepted_scores = self.scores
-        print(self.accepted_scores)
+        # for _ in range(len(self.accepted_scores)):
+        #     self.scores.append(reward)
+        # self.accepted_scores = self.scores
+        # print(self.accepted_scores)
         return self.training_data
 
 
