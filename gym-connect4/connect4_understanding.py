@@ -59,28 +59,29 @@ class TrainUlima():
 
     def train_model(self):
         X_data, y = self.model_data_preparation()
+        X = []
         for i in X_data:
-            X = i.reshape(-1, 42)[0]
+            X.append(i.reshape(-1, 42)[0].astype(int)) # Check this works
 
-        model = self.build_model(input_size=len(X), output_size=len(y))
-        model.fit(X, y, epochs=10)
-        return model
+        # model = self.build_model(input_size=len(X), output_size=len(y))
+        # model.fit(X, y, epochs=10)
+        # return model
 
-    def build_model(self, input_size, output_size):
-        model = Sequential()
-        model.add(Dense(128, input_shape=input_size, activation='relu'))
-        model.add(Dropout(0.6))
-        model.add(Dense(256, input_shape=input_size, activation='relu'))
-        model.add(Dropout(0.6))
-        model.add(Dense(512, input_shape=input_size, activation='relu'))
-        model.add(Dropout(0.6))
-        model.add(Dense(256, input_shape=input_size, activation='relu'))
-        model.add(Dropout(0.6))
-        model.add(Dense(128, input_shape=input_size, activation='relu'))
-        model.add(Dropout(0.6))
-        model.add(Dense(2, input_shape=input_size, activation='softmax'))
-        model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
-        return model
+    # def build_model(self, input_size, output_size):
+    #     model = Sequential()
+    #     model.add(Dense(128, input_shape=input_size, activation='relu'))
+    #     model.add(Dropout(0.6))
+    #     model.add(Dense(256, input_shape=input_size, activation='relu'))
+    #     model.add(Dropout(0.6))
+    #     model.add(Dense(512, input_shape=input_size, activation='relu'))
+    #     model.add(Dropout(0.6))
+    #     model.add(Dense(256, input_shape=input_size, activation='relu'))
+    #     model.add(Dropout(0.6))
+    #     model.add(Dense(128, input_shape=input_size, activation='relu'))
+    #     model.add(Dropout(0.6))
+    #     model.add(Dense(2, input_shape=input_size, activation='softmax'))
+    #     model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+    #     return model
 
 u = TrainUlima()
 trained_model = u.train_model()
