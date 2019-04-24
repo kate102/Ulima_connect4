@@ -9,6 +9,7 @@ import gym_connect4
 from keras.models     import Sequential
 from keras.layers     import Dense
 from keras.optimizers import Adam
+from keras.layers import Dropout
 
 env = gym.make('Connect4-v0')
 env.reset()
@@ -61,27 +62,29 @@ class TrainUlima():
         X_data, y = self.model_data_preparation()
         X = []
         for i in X_data:
-            X.append(i.reshape(-1, 42)[0].astype(int)) # Check this works
+            X.append(i.reshape(1, 42)[0].astype(int)) # Check this works
+        first_board = X[0]
+        first_board[first_board == -1] = 2
+        model = self.build_model(input_size=first_board, output_size=y[0])
+        model.fit(X, y, epochs=10)
 
-        # model = self.build_model(input_size=len(X), output_size=len(y))
-        # model.fit(X, y, epochs=10)
-        # return model
+        return model
 
-    # def build_model(self, input_size, output_size):
-    #     model = Sequential()
-    #     model.add(Dense(128, input_shape=input_size, activation='relu'))
-    #     model.add(Dropout(0.6))
-    #     model.add(Dense(256, input_shape=input_size, activation='relu'))
-    #     model.add(Dropout(0.6))
-    #     model.add(Dense(512, input_shape=input_size, activation='relu'))
-    #     model.add(Dropout(0.6))
-    #     model.add(Dense(256, input_shape=input_size, activation='relu'))
-    #     model.add(Dropout(0.6))
-    #     model.add(Dense(128, input_shape=input_size, activation='relu'))
-    #     model.add(Dropout(0.6))
-    #     model.add(Dense(2, input_shape=input_size, activation='softmax'))
-    #     model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
-    #     return model
+    def build_model(self, input_size, output_size):
+        model = Sequential()
+        model.add(Dense(128, input_shape=input_size, activation='relu'))
+        model.add(Dropout(0.6))
+        model.add(Dense(256, activation='relu'))
+        model.add(Dropout(0.6))
+        model.add(Dense(512, activation='relu'))
+        model.add(Dropout(0.6))
+        model.add(Dense(256, activation='relu'))
+        model.add(Dropout(0.6))
+        model.add(Dense(128, activation='relu'))
+        model.add(Dropout(0.6))
+        model.add(Dense(2, activation='softmax'))
+        model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+        return model
 
 u = TrainUlima()
 trained_model = u.train_model()
