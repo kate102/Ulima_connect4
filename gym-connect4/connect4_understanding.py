@@ -62,26 +62,31 @@ class TrainUlima():
         X_data, y = self.model_data_preparation()
         X = []
         for i in X_data:
-            X.append(i.reshape(1, 42)[0].astype(int)) # Check this works
+            X.append(i.reshape(1, 42)[0]) # Check this works    
+        X=np.array(X)
+        y=np.array(y)
         first_board = X[0]
-        first_board[first_board == -1] = 2
-        model = self.build_model(input_size=first_board, output_size=y[0])
-        model.fit(X, y, epochs=10)
+        first_board[first_board == -1] = 0
+        first_board[first_board == 1] = 0
+        y[y == -1] = 2
+        print(first_board)
+        model = self.build_model(input_size=first_board, output_size=first_board)
+        model.fit([X], y, epochs=10)
 
         return model
 
     def build_model(self, input_size, output_size):
         model = Sequential()
-        model.add(Dense(128, input_shape=input_size, activation='relu'))
+        model.add(Dense(10, input_shape=(7,6,), activation='relu'))
         model.add(Dropout(0.6))
-        model.add(Dense(256, activation='relu'))
+        model.add(Dense(10, activation='relu'))
         model.add(Dropout(0.6))
-        model.add(Dense(512, activation='relu'))
-        model.add(Dropout(0.6))
-        model.add(Dense(256, activation='relu'))
-        model.add(Dropout(0.6))
-        model.add(Dense(128, activation='relu'))
-        model.add(Dropout(0.6))
+        # model.add(Dense(10, activation='relu'))
+        # model.add(Dropout(0.6))
+        # model.add(Dense(256, activation='relu'))
+        # model.add(Dropout(0.6))
+        # model.add(Dense(128, activation='relu'))
+        # model.add(Dropout(0.6))
         model.add(Dense(2, activation='softmax'))
         model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
         return model
